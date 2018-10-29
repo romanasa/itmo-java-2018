@@ -1,41 +1,35 @@
 import java.io.*;
+import java.nio.charset.Charset;
 
-public class FastScanner {
+public class FastScanner implements AutoCloseable {
 
     private int pos = 0;
     private int len = 0;
+
+    private char cash;
+    private boolean cashed = false;
+
     private StringBuilder curString;
     private final int bufSize = 4096;
-    private char[] buf = new char[bufSize];
+    private byte[] buf = new byte[bufSize];
 
-    private Reader reader;
-
-    FastScanner() {
-        reader = null;
-        curString = null;
-    }
-
-    FastScanner(String text) throws IOException {
-        reader = new StringReader(text);
-        curString = new StringBuilder();
-        check();
-    }
+    private InputStream stream;
 
     FastScanner(InputStream stream) throws IOException {
-        reader = new InputStreamReader(stream);
+        this.stream = stream;
         curString = new StringBuilder();
         check();
     }
 
-    void close() throws IOException {
-        reader.close();
+    public void close() throws IOException {
+        stream.close();
     }
 
     private void check() throws IOException {
         if (pos == len) {
-            len = reader.read(buf, 0, bufSize);
+            len = stream.read(buf);
             while (len == 0) {
-                len = reader.read(buf, 0, bufSize);
+                len = stream.read(buf);
             }
             pos = 0;
         }
@@ -43,6 +37,7 @@ public class FastScanner {
 
     private void incPos() throws IOException {
         pos++;
+        cashed = false;
         check();
     }
 
@@ -50,9 +45,42 @@ public class FastScanner {
         return pos < len;
     }
 
+    private int get(byte x, int ind) {
+        return ((x >> ind) & 1);
+    }
+
+    private char nextChar() throws IOException {
+        if (cashed) {
+            return cash;
+        }
+        check();
+
+        byte first = buf[pos];
+        if (get(first, 7) == 1 && get(first, 6) == 1) {
+            int cnt = 0;
+            while (get(first, 7 - cnt) == 1) {
+                buf[pos] ^= 1 << (7 - cnt);
+                cnt++;
+            }
+            int res = 0;
+            for (int i = 0; i < cnt; i++) {
+                res = res * 64 + buf[pos];
+                if (i + 1 < cnt) {
+                    incPos();
+                    buf[pos] ^= (1 << 7);
+                }
+            }
+            cash = (char)res;
+        } else {
+            cash = (char)buf[pos];
+        }
+        cashed = true;
+        return cash;
+    }
+
     boolean hasNext() throws IOException {
         while (pos < len) {
-            if (Character.isWhitespace(buf[pos])) {
+            if (Character.isWhitespace(nextChar())) {
                 incPos();
             } else {
                 return true;
@@ -62,8 +90,8 @@ public class FastScanner {
     }
 
     boolean hasNextInLine() throws IOException {
-        while (pos < len && Character.isWhitespace(buf[pos])) {
-            if (buf[pos] == '\n') {
+        while (pos < len && notWord(nextChar())) {
+            if (nextChar() == '\n') {
                 incPos();
                 return false;
             }
@@ -74,13 +102,13 @@ public class FastScanner {
 
     String nextLine() throws IOException {
         while (pos < len) {
-            if (buf[pos] == '\n') {
+            if (nextChar() == '\n') {
                 incPos();
                 String res = curString.toString();
                 curString.setLength(0);
                 return res;
             } else {
-                curString.append(buf[pos]);
+                curString.append(nextChar());
                 incPos();
             }
         }
@@ -89,17 +117,46 @@ public class FastScanner {
         return res;
     }
 
-    String next() throws IOException {
-        while (pos < len && Character.isWhitespace(buf[pos])) {
+    private String next() throws IOException {
+        while (pos < len && Character.isWhitespace(nextChar())) {
             incPos();
         }
         while (pos < len) {
-            if (Character.isWhitespace(buf[pos])) {
+            if (Character.isWhitespace(nextChar())) {
                 String res = curString.toString();
                 curString.setLength(0);
                 return res;
             } else {
-                curString.append(buf[pos]);
+                curString.append(nextChar());
+                incPos();
+            }
+        }
+        String res = curString.toString();
+        curString.setLength(0);
+        return res;
+    }
+
+    private boolean notWord(char c) {
+        if (Character.isAlphabetic(c)) {
+            return false;
+        }
+        if (c == '\'') {
+            return false;
+        }
+        return Character.getType(c) != Character.DASH_PUNCTUATION;
+    }
+
+    String nextWord() throws IOException {
+        while (pos < len && notWord(nextChar())) {
+            incPos();
+        }
+        while (pos < len) {
+            if (notWord(nextChar())) {
+                String res = curString.toString();
+                curString.setLength(0);
+                return res;
+            } else {
+                curString.append(nextChar());
                 incPos();
             }
         }

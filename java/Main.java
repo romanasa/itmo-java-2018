@@ -1,8 +1,7 @@
-import reverse.*;
+import wordStat.WordStatIndexTest;
 
 public class Main {
     public static void main(String[] args) {
-        //new ReverseFastTest();
-        ReverseSumFastTest.main();
+        WordStatIndexTest.main();
     }
 }
