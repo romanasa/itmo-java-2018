@@ -5,6 +5,6 @@ package reverse;
  */
 public class ReverseFastTest {
     public static void main(String... args) {
-        new ReverseTest(1000_000).run();
+        new ReverseTest(1_000_000).run();
     }
 }
