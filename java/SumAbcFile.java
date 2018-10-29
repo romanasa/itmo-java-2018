@@ -1,7 +1,5 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.NoSuchFileException;
-import java.util.*;
 
 public class SumAbcFile {
     public static void main(String[] args) {

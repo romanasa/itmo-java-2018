@@ -1,5 +1,4 @@
 import java.io.*;
-import java.nio.charset.Charset;
 
 public class FastScanner implements AutoCloseable {
 
@@ -9,11 +8,11 @@ public class FastScanner implements AutoCloseable {
     private char cash;
     private boolean cashed = false;
 
-    private StringBuilder curString;
+    private final StringBuilder curString;
     private final int bufSize = 4096;
-    private byte[] buf = new byte[bufSize];
+    private final byte[] buf = new byte[bufSize];
 
-    private InputStream stream;
+    private final InputStream stream;
 
     FastScanner(InputStream stream) throws IOException {
         this.stream = stream;

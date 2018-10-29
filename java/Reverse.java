@@ -1,5 +1,3 @@
-import sun.plugin.javascript.navig.Array;
-
 import java.io.IOException;
 import java.util.*;
 
