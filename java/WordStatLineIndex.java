@@ -42,17 +42,17 @@ public class WordStatLineIndex {
                     writer.newLine();
                 }
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Usage: java WordStatInput <input> <output>");
+                System.out.println("Usage: java WordStatLineIndex <input> <output>");
+            } catch (UnsupportedEncodingException e) {
+                System.out.println("Unsupported Encoding");
             } catch (IOException e) {
                 System.out.println(e.toString());
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Usage: java WordStatInput <input> <output>");
+            System.out.println("Usage: java WordStatLineIndex <input> <output>");
         } catch (FileNotFoundException e) {
             System.out.println("No such file: " + args[0]);
-        } catch (UnsupportedEncodingException e) {
-            System.out.println("Unsupported Encoding");
         } catch (IOException e) {
             System.out.println("Error in reading");
             System.out.println(e.toString());
