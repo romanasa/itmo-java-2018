@@ -41,7 +41,7 @@ public class BinarySearchSpan {
         if (l + 1 == r) {
             return r;
         }
-        //r - l > 1;
+        //r - l > 1
         int m = (l + r) / 2;
         //l < m < r
         //-1 < m < a.length => a[m] exists

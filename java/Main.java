@@ -1,8 +1,8 @@
-import search.BinarySearchSpanTest;
+import queue.ArrayQueueDequeTest;
+import queue.ArrayQueueTest;
 
 public class Main {
     public static void main(String[] args) {
-        //ReverseSumFastTest.main();
-        BinarySearchSpanTest.main();
+        ArrayQueueDequeTest.main(new String[1]);
     }
 }
