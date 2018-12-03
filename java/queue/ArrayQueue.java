@@ -1,8 +1,7 @@
 package queue;
 
-public class ArrayQueue {
-
-    private int size = 0, head = 0;
+public class ArrayQueue extends AbstractQueue {
+    private int head = 0;
     private Object[] elements = new Object[5];
 
     private int inc(int i) {
@@ -35,57 +34,25 @@ public class ArrayQueue {
         elements = newElements;
     }
 
-    public void enqueue(Object element) {
+    protected void enqueueImpl(Object element) {
         assert(element != null);
         checkCapacity(size + 2);
         elements[getTail()] = element;
-        size++;
     }
 
-    public Object element() {
+    protected Object elementImpl() {
         return elements[head];
     }
 
-    public Object dequeue() {
+    protected Object dequeueImpl() {
         Object res = element();
         head = inc(head);
-        size--;
         return res;
     }
 
-
-    public void push(Object element) {
-        assert(element != null);
-        checkCapacity(size + 2);
-        head = dec(head);
-        elements[head] = element;
-        size++;
-    }
-
-    public Object peek() {
-        int pos = getTail();
-        return elements[dec(pos)];
-    }
-
-    public Object remove() {
-        Object res = peek();
-        size--;
-        return res;
-    }
-
-
-    public int size() {
-        return size;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    public void clear() {
+    protected void clearImpl() {
         for (int i = head; i != getTail(); i = inc(i)) {
             elements[i] = null;
         }
-        size = 0;
     }
 }
