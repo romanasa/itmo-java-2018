@@ -1,5 +1,8 @@
 package queue;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 public class LinkedQueue extends AbstractQueue {
 
     private class node {
@@ -40,5 +43,19 @@ public class LinkedQueue extends AbstractQueue {
     protected void clearImpl() {
         head = null;
         tail = null;
+    }
+
+    protected Queue emptyQueue() {
+        return new LinkedQueue();
+    }
+
+    protected Queue copyQueue() {
+        Queue cur = emptyQueue();
+        node curNode = head;
+        for (int i = 0; i < size; i++) {
+            cur.enqueue(curNode.value);
+            curNode = curNode.next;
+        }
+        return cur;
     }
 }

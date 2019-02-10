@@ -1,5 +1,8 @@
 package queue;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 public class ArrayQueue extends AbstractQueue {
     private int head = 0;
     private Object[] elements = new Object[5];
@@ -54,5 +57,17 @@ public class ArrayQueue extends AbstractQueue {
         for (int i = head; i != getTail(); i = inc(i)) {
             elements[i] = null;
         }
+    }
+
+    protected Queue emptyQueue() {
+        return new ArrayQueue();
+    }
+
+    protected Queue copyQueue() {
+        Queue cur = emptyQueue();
+        for (int i = head; i != getTail(); i = inc(i)) {
+            cur.enqueue(elements[i]);
+        }
+        return cur;
     }
 }

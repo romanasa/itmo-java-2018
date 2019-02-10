@@ -1,4 +1,5 @@
 package queue;
+import java.util.function.*;
 
 public interface Queue {
 
@@ -29,4 +30,12 @@ public interface Queue {
     //pre: true
     void clear();
     //post: size' = 0
+
+    //pre: true
+    Queue filter(Predicate<Object> p);
+    //post: R = new queue, contains elements matching to the predicate in the same order
+
+    //pre: true
+    Queue map(Function<Object, Object> f);
+    //post: R = new queue, for all i = 0..size - 1: a'[i] = f(a[i])
 }
